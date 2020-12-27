@@ -1,12 +1,22 @@
-from flask import Flask
+import os
 
-app = Flask(__name__)
+from flask_script import Manager
 
+from app import create_app
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
+# from flask import Flask
+#
+# app = Flask(__name__)
+config_name = os.environ.get('config') or 'Development'
+app = create_app(config_name)
+
+manager = Manager(app)
+
+# @app.route('/')
+# def hello_world():
+#     return 'Hello World!'
 
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    manager.run()
