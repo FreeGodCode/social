@@ -7,7 +7,7 @@ from app.models.passageways import PassagewaysForm
 from app.views.base import BaseModelView
 
 
-class PassawaysModelView(BaseModelView):
+class PassagewaysModelView(BaseModelView):
     """温馨通道管理视图类"""
     column_list = ('url', 'name', 'sort')
     column_labels = dict(name='通道名称', url='网站链接', sort='排序')

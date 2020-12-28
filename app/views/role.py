@@ -9,7 +9,7 @@ from app.models.role import RolesForm
 from app.views.base import BaseModelView, get_user_permissions, admin_permissions
 
 
-class RolesModelVIew(BaseModelView):
+class RolesModelView(BaseModelView):
     """角色管理视图类"""
     column_list = ('name',)
     column_labels = dict(name='角色名')

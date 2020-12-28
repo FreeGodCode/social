@@ -9,7 +9,7 @@ from app.models.user import UserForm
 from app.views.base import BaseModelView, fill_form_choices
 
 
-class UserModelView(BaseModelView):
+class UsersModelView(BaseModelView):
     """用户管理视图类"""
     column_list = ('username', 'email', 'is_active', 'is_disabled', 'is_admin', 'vip', 'avatar', 'coin', 'description', 'city', 'auth_msg')
     column_labels = {'username': '用户昵称', 'email': '邮箱', 'is_active': '激活状态', 'vip': 'vip等级', 'is_disabled': '禁用', 'is_admin': '超级用户', 'avatar': '头像', 'coin': '金币', 'description': '描述', 'city': '城市', 'auth_msg': '认证信息'}
@@ -24,12 +24,12 @@ class UserModelView(BaseModelView):
     permission_name = 'users'
 
     def create_form(self, obj=None):
-        real_form = super(UserModelView, self).create_form(obj)
+        real_form = super(UsersModelView, self).create_form(obj)
         fill_form_choices(real_form.role_ids, 'roles', 'username')
         return real_form
 
     def edit_form(self, obj=None):
-        real_form = super(UserModelView, self).edit_form(obj)
+        real_form = super(UsersModelView, self).edit_form(obj)
         fill_form_choices(real_form.role_ids, 'roles', 'username')
         return real_form
 

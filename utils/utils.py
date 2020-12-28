@@ -11,7 +11,9 @@ from bson import ObjectId
 from flask import session, request, current_app
 from flask_mail import Message
 
+import models
 from app import mail
+from code_msg import VERIFY_CODE_ERROR
 
 
 class JSONEncode(json.JSONEncoder):
@@ -28,10 +30,10 @@ def verify_code(code):
     :return:
     """
     if code != session['ver_code']:
-        raise 'verify_code_error'
+        # raise 'verify_code_error'
+        raise models.GlobalApiException(VERIFY_CODE_ERROR)
 
-
-def gen_verify_code():
+def generate_verify_code():
     """
     生成验证码
     :return:

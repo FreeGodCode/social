@@ -20,8 +20,20 @@ from flask_login import LoginManager
 from flask_uploads import UploadSet, configure_uploads, All
 from jieba.analyse import ChineseAnalyzer
 from werkzeug.security import generate_password_hash
+from whoosh.fields import Schema, ID, TEXT, DATETIME
 
+from app.views.ads import AdsModelView
+from app.views.catalogs import CatalogsModelView
+from app.views.footer import FooterLinksModelView
+from app.views.friend_links import FriendLinksModelView
+from app.views.option import OptionsModelView
+from app.views.page import PagesModelView
+from app.views.passageways import PassagewaysModelView
+from app.views.post import PostsModelView
+from app.views.role import RolesModelView
+from app.views.user import UsersModelView
 from config import config
+from models import User
 from utils import db_utils
 from utils.db_utils import get_option, get_page, get_list, find_one
 
@@ -78,12 +90,26 @@ def init_extensions(app):
 
     with app.app_context():
         # 添加flask-admin视图
-        admin.add_view(admin_view.UserModelView(mongo.db['user'], '用户管理'))
+        admin.add_view(UsersModelView(mongo.db['users'], '用户管理'))
+        admin.add_view(RolesModelView(mongo.db['roles'], '角色管理'))
+        admin.add_view(CatalogsModelView(mongo.db['catalogs'], '栏目管理', category='内容管理'))
+        admin.add_view(PostsModelView(mongo.db['posts'], '帖子管理', category='内容管理'))
+        admin.add_view(PassagewaysModelView(mongo.db['passageways'], '温馨通道', category='推广管理'))
+        admin.add_view(FriendLinksModelView(mongo.db['friend_links'], '友链管理', category='推广管理'))
+        admin.add_view(PagesModelView(mongo.db['pages'], '页面管理', category='推广管理'))
+        admin.add_view(FooterLinksModelView(mongo.db['footer_links'], '底部链接', category='推广管理'))
+        admin.add_view(AdsModelView(mongo.db['ads'], '广告管理', category='推广管理'))
+        admin.add_view(OptionsModelView(mongo.db['options'], '系统管理'))
 
         # 初始化whoosh索引
         chinese_analyzer = ChineseAnalyzer()
         post_schema = Schema(
-
+            obj_id=ID(unique=True, sortable=True),
+            title=TEXT(sortable=True, analyzer=chinese_analyzer),
+            content=TEXT(sortable=True, analyzer=chinese_analyzer),
+            create_at=DATETIME(sortable=True),
+            catalog_id = ID(sortable=True),
+            user_id = ID(sortable=True)
         )
         whoosh_searcher.add_index('posts', post_schema)
 
