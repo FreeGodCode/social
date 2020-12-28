@@ -4,8 +4,10 @@
 # @IDE: PyCharm
 # @Create time: 12/27/20 9:41 PM
 import functools
+import os
 from datetime import timedelta, datetime
 
+from bson import ObjectId
 from flask import Flask
 from flask_cache import Cache
 from flask_mail import Mail
@@ -17,8 +19,11 @@ from flask_login import LoginManager
 # 初始化邮件
 from flask_uploads import UploadSet, configure_uploads, All
 from jieba.analyse import ChineseAnalyzer
+from werkzeug.security import generate_password_hash
 
 from config import config
+from utils import db_utils
+from utils.db_utils import get_option, get_page, get_list, find_one
 
 mail = Mail()
 # 初始化后台管理admin
@@ -125,7 +130,7 @@ def mongo_date_str(date):
 
 def init_func(app):
     """
-
+    初始化函数
     :param app:
     :return:
     """
@@ -155,14 +160,101 @@ def clear_cache(func):
     return decorator
 
 
+# 蓝图默认配置:(蓝图, 前缀)
+DEFAULT_BLUEPRINT = [
+    (index, ''),
+    (user_view, '/user'),
+    (post_collection, '/collection'),
+    (api_view, '/api'),
+    (exception_view, '/error'),
+]
+
+
+def config_blueprint(app):
+    """
+    蓝图配置
+    :param app:
+    :return:
+    """
+    for blueprint, url_prefix in DEFAULT_BLUEPRINT:
+        app.register_blueprint(blueprint, url_prefix=url_prefix)
+
+
+def install_init():
+    """
+
+    :return:
+    """
+    lock_file = os.path.join(os.getcwd(), 'installed.lock')
+    if os.path.exists(lock_file):
+        return
+    options = [
+        {
+            'name': '网站标题',
+             'code': 'title',
+             'value': 'tycarry'
+        },
+        {
+            'name': '网站描述',
+             'code': 'description',
+             'value': 'tycarry'
+        },
+        {
+            'name': '网站关键字',
+             'code': 'key_words',
+             'value': 'tycarry'
+        },
+        {
+            'name': '网站LOGO',
+             'code': 'LOGO',
+             'value': 'tycarry'
+        },
+        {
+            'name': '签到奖励区间(格式: 1-100)',
+             'code': 'sign_interval',
+             'value': '1-100'
+        },
+        {
+            'name': '开启用户注册(0关闭, 1开启)',
+             'code': 'open_user',
+             'value': '1'
+        },
+        {
+            'name': '管理员邮箱(申请好友链接用到)',
+             'code': 'email',
+             'value': '2501160661@qq.com'
+        },
+        {
+            'name': '底部信息(支持html代码)',
+             'code': 'footer',
+             'value': 'tycarry'
+        },
+    ]
+    result = mongo.db.options.insert_many(options)
+    mongo.db.users.insert_one({
+        'email': 'admin',
+        'username': 'admin',
+        'password': generate_password_hash('admin'),
+        'is_admin': True,
+        'authentication': '社区超级管理员',
+        'vip': 5,
+        'coin': 9999,
+        'avatar': '/static/images/avatar/head.jpg',
+        'is_activate': True,
+        'created_time': datetime.utcnow(),
+    })
+    if len(result.inserted_ids) > 0:
+        with open(lock_file, 'wb')as f:
+            f.write('1')
+
 def create_app(config_name):
     app = Flask(__name__, static_folder='../satatic', template_folder='../templates')
     app.config['SECRET_KEY'] = 'tycarry'
     app.config.from_object(config[config_name])
     init_extensions(app)
     init_func(app)
-    # config_blueprint(app)
-    # with app.app_context():
-    #     app.config['MAIL_SUBJECT_PREFIX'] = ''
-    #     install_init()
+    config_blueprint(app)
+    with app.app_context():
+        app.config['MAIL_SUBJECT_PREFIX'] = db_utils.get_option('mail_prefix') or app.config['MAIL_SUBJECT_PREFIX']
+        install_init()
     return app
