@@ -26,8 +26,8 @@ CHANGE_PASSWORD_FAIL = Response(status=50103, msg='密码修改失败')
 EMAIL_EXIST = Response(status=50104, msg='该邮箱已存在')
 REPEAT_SIGNED = Response(status=50105, msg='不能重复签到')
 
-SEND_CHANGE_PASSWORD_MAIL = Response(status=0, msg='重置密码邮件已发送,请前往邮箱查看')
-SEND_RE_ACTIVATE_MAIL = Response(status=0, msg='重新发送邮件成功,请前往邮箱查看邮件激活你的帐号')
+SEND_RESET_PASSWORD_MAIL = Response(status=0, msg='重置密码邮件已发送,请前往邮箱查看')
+RE_SEND_ACTIVATE_MAIL = Response(status=0, msg='重新发送邮件成功,请前往邮箱查看邮件激活你的帐号')
 REGISTER_SUCCESS = Response(status=0, msg='用户注册成功,请前往注册邮箱查看激活邮件,激活你的帐号后登录')
 LOGIN_SUCCESS = Response(status=0, msg='登录成功')
 
