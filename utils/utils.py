@@ -29,9 +29,10 @@ def verify_code(code):
     :param code:
     :return:
     """
-    if code != session['ver_code']:
+    if code != session['verify_code']:
         # raise 'verify_code_error'
         raise models.GlobalApiException(VERIFY_CODE_ERROR)
+
 
 def generate_verify_code():
     """
@@ -41,7 +42,7 @@ def generate_verify_code():
     a = random.randint(-20, 20)
     b = random.randint(0, 50)
     data = {'question': str(a) + '+' + str(b) + '= ?', 'answer': str(a + b)}
-    session['ver_code'] = data['answer']
+    session['verify_code'] = data['answer']
     return data
 
 
