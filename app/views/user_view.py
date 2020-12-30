@@ -11,10 +11,12 @@ from flask import Blueprint, render_template, request, jsonify, url_for, redirec
 from flask_login import login_required, current_user, login_user, logout_user
 from werkzeug.security import generate_password_hash
 
-import code_msg
-import models
-from app import mongo
-from utils import db_utils, utils
+from app import models, code_msg
+from app.extensions import mongo
+
+from app.forms import ForgetPasswordForm, ChangePasswordForm, SendForgetMailForm, RegisterForm, LoginFrom
+
+from app.utils import db_utils, utils
 
 user = Blueprint('user', __name__, url_prefix='', static_folder='../../static', template_folder='../../templates')
 
@@ -96,7 +98,7 @@ def user_repass():
     """
     if 'email' in request.values:
         # 忘记密码对象实例化
-        pwd_form = models.ForgetPasswordForm()
+        pwd_form = ForgetPasswordForm()
         # 参数验证
         if not pwd_form.validate():
             return jsonify(models.Response.fail(code_msg.PARAM_ERROR.get_msg(), str(pwd_form.errors)))
@@ -124,7 +126,7 @@ def user_repass():
     if not current_user.is_authenticated:
         return redirect(url_for('user.login'))
     # 修改密码
-    pwd_form = models.ChangePasswordForm()
+    pwd_form = ChangePasswordForm()
     if not pwd_form.validate():
         return jsonify(models.Response.fail(code_msg.PARAM_ERROR.get_msg(), str(pwd_form.errors)))
     now_password = pwd_form.now_password.data
@@ -145,7 +147,7 @@ def user_forget_password(code=None):
     :return:
     """
     if request.method == 'POST':
-        mail_form = models.SendForgetMailForm()
+        mail_form = SendForgetMailForm()
         if not mail_form.validate():
             return jsonify(models.Response.fail(code_msg.PARAM_ERROR.get_msg(), str(mail_form.errors)))
 
@@ -232,7 +234,7 @@ def register():
     """
     if db_utils.get_option('open_user', {}).get('value') != '1':
         abort(403)
-    user_form = models.RegisterForm()
+    user_form = RegisterForm()
     if user_form.is_submitted():
         if not user_form.validate():
             return jsonify(models.Response.fail(code_msg.PARAM_ERROR.get_msg(), str(user_form.errors)))
@@ -265,7 +267,7 @@ def login():
     z登录
     :return:
     """
-    user_form = models.LoginFrom()
+    user_form = LoginFrom()
     # 表单提交
     if user_form.is_submitted():
         # pass

@@ -12,12 +12,12 @@ from flask import Blueprint, request, jsonify, abort, redirect, render_template,
 from flask_login import current_user, login_required
 from flask_uploads import UploadNotAllowed
 
-import code_msg
-import models
-from app import mongo, upload_img, whoosh_searcher, clear_cache
-from utils import db_utils
+from app import models, code_msg
+from app.extensions import mongo, upload_img, clear_cache, whoosh_searcher
 
-api = Blueprint('api', __name__, url_prefix='', template_folder='../../templates')
+from app.utils import db_utils
+
+api_view = Blueprint('api', __name__, url_prefix='', template_folder='../../templates')
 
 
 def add_message(user, content):
@@ -37,8 +37,8 @@ def add_message(user, content):
         mongo.db.users.update({'_id': user['_id']}, {'$inc': {'unread': 1}})
 
 
-@api.route('/upload/<string:name>')
-@api.route('/upload', methods=['POST'])
+@api_view.route('/upload/<string:name>')
+@api_view.route('/upload', methods=['POST'])
 def upload(name=None):
     """
     文件上传
@@ -65,7 +65,7 @@ def upload(name=None):
     return redirect(upload_img.url(name))
 
 
-@api.route('/adopt/<ObjectId:comment_id>', methods=["POST"])
+@api_view.route('/adopt/<ObjectId:comment_id>', methods=["POST"])
 @login_required
 def post_adopt(comment_id):
     """
@@ -100,7 +100,7 @@ def post_adopt(comment_id):
     return jsonify(models.Response.ok())
 
 
-@api.route('/reply/zan/<ObjectId:comment_id>', methods=['POST'])
+@api_view.route('/reply/zan/<ObjectId:comment_id>', methods=['POST'])
 @login_required
 def reply_zan(comment_id):
     """
@@ -123,7 +123,7 @@ def reply_zan(comment_id):
     return jsonify(models.Response().ok())
 
 
-@api.route('/reply', methods=['POST'])
+@api_view.route('/reply', methods=['POST'])
 @login_required
 def post_reply():
     """
@@ -169,7 +169,7 @@ def post_reply():
     return jsonify(code_msg.COMMENT_SUCCESS)
 
 
-@api.route('/reply/delete/<ObjectId:comment_id>', methods=['POST'])
+@api_view.route('/reply/delete/<ObjectId:comment_id>', methods=['POST'])
 @login_required
 def reply_delete(comment_id):
     # 超级用户
@@ -188,7 +188,7 @@ def reply_delete(comment_id):
     return jsonify(code_msg.DELETE_SUCCESS)
 
 
-@api.route('/reply/content/<ObjectId:comment_id>', methods=['GET', 'POST'])
+@api_view.route('/reply/content/<ObjectId:comment_id>', methods=['GET', 'POST'])
 @login_required
 def get_reply_content(comment_id):
     """
@@ -200,7 +200,7 @@ def get_reply_content(comment_id):
     return jsonify(models.Response.ok(data=comment['content']))
 
 
-@api.route('/reply/update/<ObjectId:comment_id>', methods=['POST'])
+@api_view.route('/reply/update/<ObjectId:comment_id>', methods=['POST'])
 @login_required
 def reply_update(comment_id):
     """
@@ -218,7 +218,7 @@ def reply_update(comment_id):
     return jsonify(models.Response.ok())
 
 
-@api.route('/post/delete/<ObjectId:post_id>', methods=['POST'])
+@api_view.route('/post/delete/<ObjectId:post_id>', methods=['POST'])
 @login_required
 @clear_cache
 def post_delete(post_id):
@@ -238,7 +238,7 @@ def post_delete(post_id):
     return jsonify(code_msg.DELETE_SUCCESS.put('action', url_for('index.index', catalog_id=post['catalog_id'])))
 
 
-@api.route('/post/set/<ObjectId:post_id>/<string:field>/<int:value>', methods=['POST'])
+@api_view.route('/post/set/<ObjectId:post_id>/<string:field>/<int:value>', methods=['POST'])
 @login_required
 @clear_cache
 def post_set(post_id, field, value):
@@ -262,8 +262,8 @@ def post_set(post_id, field, value):
     return jsonify(models.Response.ok())
 
 
-@api.route('/posts/<int:pn>', methods=["GET", "POST"])
-@api.route('/posts', methods=["GET", 'POST'])
+@api_view.route('/posts/<int:pn>', methods=["GET", "POST"])
+@api_view.route('/posts', methods=["GET", 'POST'])
 @login_required
 def post_list(pn=1):
     """
@@ -277,7 +277,7 @@ def post_list(pn=1):
     return dumps(data)
 
 
-@api.route('/sign', methods=['POST'])
+@api_view.route('/sign', methods=['POST'])
 @login_required
 def user_sign():
     """
@@ -305,7 +305,7 @@ def user_sign():
     return jsonify(models.Response.ok(data={'signed': True, 'coin': coin}))
 
 
-@api.route('/sign/status', methods=['POST'])
+@api_view.route('/sign/status', methods=['POST'])
 @login_required
 def sign_status():
     """

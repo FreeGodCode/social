@@ -3,7 +3,7 @@
 # @File name: code_msg.py 
 # @IDE: PyCharm
 # @Create time: 12/28/20 9:06 PM
-from models import Response
+from app.models import Response
 
 # 通用
 # SUCCESS = BaseResult(status=0, msg='操作成功')

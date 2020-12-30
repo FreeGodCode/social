@@ -7,8 +7,8 @@ from bson.json_util import dumps
 from flask import Blueprint, jsonify
 from flask_login import login_required, current_user
 
-import models
-from app import mongo
+from app import models
+from app.extensions import mongo
 
 post_collection = Blueprint('collection', __name__, url_prefix='', static_folder='../../static',
                             template_folder='../../templates')

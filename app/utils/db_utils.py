@@ -5,7 +5,7 @@
 # @Create time: 12/27/20 11:33 PM
 from bson import ObjectId
 
-from app import mongo
+from app.extensions import mongo
 
 
 def _process_filter(filter_cond):

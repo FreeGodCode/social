@@ -7,7 +7,7 @@ from app import create_app
 # from flask import Flask
 #
 # app = Flask(__name__)
-config_name = os.environ.get('config') or 'Development'
+config_name = os.environ.get('FLASK_CONFIG') or 'development'
 app = create_app(config_name)
 
 manager = Manager(app)

@@ -3,13 +3,18 @@
 # @File name: passageways.py
 # @IDE: PyCharm
 # @Create time: 12/28/20 10:43 AM
-from wtforms import form, fields
+from app.admin.passageways import PassagewaysForm
+from app.models.base import BaseModelView
 
 
-class PassagewaysForm(form.Form):
-    """温馨通道管理表单类"""
-    name = fields.StringField('通道名称')
-    url = fields.StringField('网站链接')
-    sort = fields.IntegerField('排序', default=0)
-    # 表单字段
-    form_columns = ('name', 'url')
+class PassagewaysModelView(BaseModelView):
+    """温馨通道管理视图类"""
+    column_list = ('url', 'name', 'sort')
+    column_labels = dict(name='通道名称', url='网站链接', sort='排序')
+    column_sortable_list = 'name'
+    column_default_sort = ('name', False)
+    can_create = True
+    can_delete = True
+    can_edit = True
+    form = PassagewaysForm
+    permission_name = 'passageways'

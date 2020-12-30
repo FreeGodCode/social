@@ -11,10 +11,11 @@ from flask import Blueprint, request, render_template, jsonify, url_for, session
 from flask_login import login_required, current_user
 from whoosh import qparser, sorting
 
-import code_msg
-import models
-from app import cache, clear_cache, mongo, whoosh_searcher
-from utils import utils, db_utils
+from app import models, code_msg
+from app.extensions import cache, clear_cache, mongo, whoosh_searcher
+from app.forms import PostsForm
+
+from app.utils import db_utils, utils
 
 index = Blueprint('index', __name__, url_prefix='', static_folder='../../static', template_folder='../../templates')
 
@@ -62,7 +63,7 @@ def add(post_id=None):
     :param post_id:
     :return:
     """
-    posts_form = models.PostsForm()
+    posts_form = PostsForm()
     if posts_form.is_submitted():
         if not posts_form.validate():
             return jsonify(models.BaseResult(1, str(posts_form.errors)))

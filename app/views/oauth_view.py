@@ -5,7 +5,7 @@
 # @Create time: 12/28/20 11:16 PM
 from flask import Blueprint, url_for, redirect, session, request
 
-from app import oauth
+from app.extensions import oauth
 
 oauth_view = Blueprint('oauth', __name__, url_prefix='', static_folder='../../static',
                        template_folder='../../templates')

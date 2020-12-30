@@ -11,9 +11,8 @@ from bson import ObjectId
 from flask import session, request, current_app
 from flask_mail import Message
 
-import models
-from app import mail
-from code_msg import VERIFY_CODE_ERROR
+from app import mail, models
+from app.code_msg import VERIFY_CODE_ERROR
 
 
 class JSONEncode(json.JSONEncoder):

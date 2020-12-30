@@ -2,14 +2,21 @@
 # @Author: ty
 # @File name: ads.py 
 # @IDE: PyCharm
-# @Create time: 12/28/20 2:59 PM
-from wtforms import form, fields
+# @Create time: 12/28/20 3:04 PM
+from app.admin.ads import AdsForm
+from app.models.base import BaseModelView
 
 
-class AdsForm(form.Form):
-    """广告管理表单类"""
-    name = fields.StringField('名称')
-    url = fields.StringField('链接')
-    color = fields.StringField('颜色', default='#ffffff')
-    sort = fields.IntegerField('排序', default=0)
-    form_column = ('name', 'url')
+class AdsModelView(BaseModelView):
+    """广告管理视图类"""
+    column_list = ('name', 'url', 'color', 'sort')
+    column_labels = dict(name='名称', url='链接', color='颜色', sort='排序')
+    column_sortable_list = 'name'
+    column_default_sort = ('name', False)
+
+    can_create = True
+    can_delete = True
+    can_edit = True
+
+    form = AdsForm
+    permission_name = 'ads'

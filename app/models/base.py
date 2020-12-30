@@ -7,20 +7,9 @@ from flask import redirect, url_for, request
 from flask_admin.contrib.pymongo import ModelView
 from flask_login import current_user
 
+from app.extensions import mongo
 
-from app import mongo
 
-admin_permissions = [
-    ('roles', '角色管理'),
-    ('users', '用户管理'),
-    ('catalogs', '栏目管理'),
-    ('passageways', '温馨通道'),
-    ('friend_links', '友情链接管理'),
-    ('pages', '页面管理'),
-    ('footer_links', '底部链接'),
-    ('ads', '广告管理'),
-    ('options', '系统管理'),
-]
 
 
 class BaseModelView(ModelView):
