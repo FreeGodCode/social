@@ -12,8 +12,10 @@ from flask import Blueprint, request, jsonify, abort, redirect, render_template,
 from flask_login import current_user, login_required
 from flask_uploads import UploadNotAllowed
 
-from app import models, code_msg
+from app import code_msg
+from app.models import models
 from app.extensions import mongo, upload_img, clear_cache, whoosh_searcher
+
 
 from app.utils import db_utils
 

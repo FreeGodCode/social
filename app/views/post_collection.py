@@ -7,7 +7,7 @@ from bson.json_util import dumps
 from flask import Blueprint, jsonify
 from flask_login import login_required, current_user
 
-from app import models
+from app.models import models
 from app.extensions import mongo
 
 post_collection = Blueprint('collection', __name__, url_prefix='', static_folder='../../static',

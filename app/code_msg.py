@@ -3,10 +3,12 @@
 # @File name: code_msg.py 
 # @IDE: PyCharm
 # @Create time: 12/28/20 9:06 PM
-from app.models import Response
+
 
 # 通用
 # SUCCESS = BaseResult(status=0, msg='操作成功')
+from app.models.models import Response
+
 SERVER_ERROR = Response(status=500, msg='系统错误')
 PARAM_ERROR = Response(status=50001, msg='参数错误')
 VERIFY_CODE_ERROR = Response(status=50002, msg='验证码错误')

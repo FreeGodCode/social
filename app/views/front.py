@@ -11,9 +11,10 @@ from flask import Blueprint, request, render_template, jsonify, url_for, session
 from flask_login import login_required, current_user
 from whoosh import qparser, sorting
 
-from app import models, code_msg
+from app import code_msg
 from app.extensions import cache, clear_cache, mongo, whoosh_searcher
 from app.forms import PostsForm
+from app.models import models
 
 from app.utils import db_utils, utils
 

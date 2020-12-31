@@ -16,26 +16,14 @@ from flask_uploads import UploadSet, All, configure_uploads
 from jieba.analyse import ChineseAnalyzer
 from whoosh.fields import Schema, ID, TEXT, DATETIME
 
-from app.models.ads import AdsModelView
-from app.models.catalogs import CatalogsModelView
-from app.models.footer import FooterLinksModelView
-from app.models.friend_links import FriendLinksModelView
-from app.models.option import OptionsModelView
-from app.models.passageways import PassagewaysModelView
-from app.models.page import PagesModelView
-from app.models.post import PostsModelView
-from app.models.role import RolesModelView
-from app.models.user import UsersModelView
-from app.views.exception_view import exception_view
-from app.views.user_view import user
-from app.views.front import index
-from app.views.api_view import api_view
-from app.views.post_collection import post_collection
-from app.model import User
+from app.admin.admin_view import UsersModelView, RolesModelView, CatalogsModelView, PostsModelView, \
+    PassagewaysModelView, FriendLinksModelView, PagesModelView, FooterLinksModelView, AdsModelView, OptionsModelView
+from app.models.models import User
 
 mail = Mail()
 # 初始化后台管理admin
 admin = Admin(name='social backend manage')
+
 mongo = PyMongo()
 login_manager = LoginManager()
 login_manager.login_view = 'user.login'
@@ -80,9 +68,9 @@ def init_extensions(app):
     mongo.init_app(app, 'MONGO')
     oauth.init_app(app)
     login_manager.init_app(app)
-    use_cache = app.config.get('USE_CHCHE', False)
-    if use_cache:
-        cache.init_app(app)
+    # use_cache = app.config.get('USE_CHCHE', False)
+    # if use_cache:
+    #     cache.init_app(app)
 
     with app.app_context():
         # 添加flask-admin视图
@@ -125,23 +113,3 @@ def clear_cache(func):
         return func(*args, **kwargs)
 
     return decorator
-
-
-# 蓝图默认配置:(蓝图, 前缀)
-DEFAULT_BLUEPRINT = [
-    (index, ''),
-    (user, '/user'),
-    (post_collection, '/collection'),
-    (api_view, '/api'),
-    (exception_view, '/error'),
-]
-
-
-def config_blueprint(app):
-    """
-    蓝图配置
-    :param app:
-    :return:
-    """
-    for blueprint, url_prefix in DEFAULT_BLUEPRINT:
-        app.register_blueprint(blueprint, url_prefix=url_prefix)

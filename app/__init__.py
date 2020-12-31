@@ -5,8 +5,9 @@
 # @Create time: 12/27/20 9:41 PM
 from flask import Flask
 
+from app.views import config_blueprint
 from config import config
-from app.extensions import init_extensions, config_blueprint
+from app.extensions import init_extensions
 from app.func import init_func
 from app.install_init import install_init
 from app.utils import db_utils

@@ -1,6 +1,6 @@
 # -*- coding: utf-8  -*-
 # @Author: ty
-# @File name: model.py
+# @File name: models.py
 # @IDE: PyCharm
 # @Create time: 12/28/20 4:40 PM
 from json import JSONEncoder
@@ -64,7 +64,6 @@ class Response(dict):
 
 
 class BaseResult(Response):
-
     def __init__(self, code=0, msg='', data=None):
         self.put('status', code)
         self.put('msg', msg)

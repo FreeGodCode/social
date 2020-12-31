@@ -11,8 +11,10 @@ from bson import ObjectId
 from flask import session, request, current_app
 from flask_mail import Message
 
-from app import mail, models
+
 from app.code_msg import VERIFY_CODE_ERROR
+from app.extensions import mail
+from app.models.models import GlobalApiException
 
 
 class JSONEncode(json.JSONEncoder):
@@ -30,7 +32,7 @@ def verify_code(code):
     """
     if code != session['verify_code']:
         # raise 'verify_code_error'
-        raise models.GlobalApiException(VERIFY_CODE_ERROR)
+        raise GlobalApiException(VERIFY_CODE_ERROR)
 
 
 def generate_verify_code():

@@ -11,7 +11,8 @@ from flask import Blueprint, render_template, request, jsonify, url_for, redirec
 from flask_login import login_required, current_user, login_user, logout_user
 from werkzeug.security import generate_password_hash
 
-from app import models, code_msg
+from app import code_msg
+from app.models import models
 from app.extensions import mongo
 
 from app.forms import ForgetPasswordForm, ChangePasswordForm, SendForgetMailForm, RegisterForm, LoginFrom

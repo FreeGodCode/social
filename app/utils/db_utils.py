@@ -6,6 +6,7 @@
 from bson import ObjectId
 
 from app.extensions import mongo
+from app.models.models import Page
 
 
 def _process_filter(filter_cond):

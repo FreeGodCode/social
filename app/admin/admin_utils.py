@@ -1,29 +1,10 @@
 # -*- coding: utf-8  -*-
 # @Author: ty
-# @File name: base.py
+# @File name: admin_utils.py 
 # @IDE: PyCharm
-# @Create time: 12/28/20 10:43 AM
-from flask import redirect, url_for, request
-from flask_admin.contrib.pymongo import ModelView
-from flask_login import current_user
-
+# @Create time: 12/31/20 9:42 PM
+from app.admin.admin_config import admin_permissions
 from app.extensions import mongo
-
-
-
-
-class BaseModelView(ModelView):
-    """视图基类"""
-    permission_name = ''
-
-    def is_accessible(self):
-        # return True
-        return current_user.is_authenticated and current_user.user[
-            'is_admin'] or self.permission_name in get_user_permissions(current_user.user)
-
-    def inaccessible_callback(self, name, **kwargs):
-        # redirect to login page if user doesn't have access
-        return redirect(url_for('user.login', next=request.url))
 
 
 def fill_form_choices(form_field, collection_name, db_field_name):
