@@ -13,6 +13,7 @@ from app.install_init import install_init
 from app.utils import db_utils
 
 
+# 结构会出现循环引用,使用懒加载的方式处理
 def create_app(config_name):
     app = Flask(__name__, static_folder='../static', template_folder='../templates')
     app.config['SECRET_KEY'] = 'tycarry'
