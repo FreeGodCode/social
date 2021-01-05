@@ -16,8 +16,7 @@ from flask_uploads import UploadSet, All, configure_uploads
 from jieba.analyse import ChineseAnalyzer
 from whoosh.fields import Schema, ID, TEXT, DATETIME
 
-from app.admin.admin_view import UsersModelView, RolesModelView, CatalogsModelView, PostsModelView, \
-    PassagewaysModelView, FriendLinksModelView, PagesModelView, FooterLinksModelView, AdsModelView, OptionsModelView
+from app.admin import admin_view
 from app.models.models import User
 
 mail = Mail()
@@ -74,16 +73,16 @@ def init_extensions(app):
 
     with app.app_context():
         # 添加flask-admin视图
-        admin.add_view(UsersModelView(mongo.db['users'], '用户管理'))
-        admin.add_view(RolesModelView(mongo.db['roles'], '角色管理'))
-        admin.add_view(CatalogsModelView(mongo.db['catalogs'], '栏目管理', category='内容管理'))
-        admin.add_view(PostsModelView(mongo.db['posts'], '帖子管理', category='内容管理'))
-        admin.add_view(PassagewaysModelView(mongo.db['passageways'], '温馨通道', category='推广管理'))
-        admin.add_view(FriendLinksModelView(mongo.db['friend_links'], '友链管理', category='推广管理'))
-        admin.add_view(PagesModelView(mongo.db['pages'], '页面管理', category='推广管理'))
-        admin.add_view(FooterLinksModelView(mongo.db['footer_links'], '底部链接', category='推广管理'))
-        admin.add_view(AdsModelView(mongo.db['ads'], '广告管理', category='推广管理'))
-        admin.add_view(OptionsModelView(mongo.db['options'], '系统管理'))
+        admin.add_view(admin_view.UsersModelView(mongo.db['users'], '用户管理'))
+        admin.add_view(admin_view.RolesModelView(mongo.db['roles'], '角色管理'))
+        admin.add_view(admin_view.CatalogsModelView(mongo.db['catalogs'], '栏目管理', category='内容管理'))
+        admin.add_view(admin_view.PostsModelView(mongo.db['posts'], '帖子管理', category='内容管理'))
+        admin.add_view(admin_view.PassagewaysModelView(mongo.db['passageways'], '温馨通道', category='推广管理'))
+        admin.add_view(admin_view.FriendLinksModelView(mongo.db['friend_links'], '友链管理', category='推广管理'))
+        admin.add_view(admin_view.PagesModelView(mongo.db['pages'], '页面管理', category='推广管理'))
+        admin.add_view(admin_view.FooterLinksModelView(mongo.db['footer_links'], '底部链接', category='推广管理'))
+        admin.add_view(admin_view.AdsModelView(mongo.db['ads'], '广告管理', category='推广管理'))
+        admin.add_view(admin_view.OptionsModelView(mongo.db['options'], '系统管理'))
 
         # 初始化whoosh索引
         chinese_analyzer = ChineseAnalyzer()

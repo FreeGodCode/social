@@ -9,6 +9,7 @@ import os
 class Config():
     """全局配置"""
     # MAIL
+    # SECRET_KEY = 'tycarry'
     MAIL_SERVER = 'smtp.163.com'
     MAIL_PORT = 456
     MAIL_USE_TLS = True
@@ -22,8 +23,8 @@ class Config():
     # csrf
     WTF_CSRF_ENABLED = False
     # uploads dir path
-    UPLOADED_IMG_DEST = os.path.join(os.getcwd(), 'uploads')
-    UPLOADED_FILES_DEST = os.path.join(os.getcwd(), 'uploads')
+    UPLOADED_IMG_DEST = os.path.join(os.getcwd(), '../uploads')
+    UPLOADED_FILES_DEST = os.path.join(os.getcwd(), '../uploads')
     # whoosh
     WHOOSH_PATH = os.path.join(os.getcwd(), 'whoosh_indexes')
     # cache settings
