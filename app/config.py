@@ -15,6 +15,7 @@ class Config():
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
     MAIL_USERNAME = 'thechosenone_ty@163.com'
+    MAIL_SENDER = '2501160661@qq.com'
     MAIL_PASSWORD = ''
     MAIL_DEBUG = True
     MAIL_SUBJECT_PREFIX = 'TYCARRY'
